@@ -1,3 +1,5 @@
+(ns day01
+  (:require [clojure.test :as t]))
 ;; https://adventofcode.com/2019
 
 ;; debug fn
@@ -31,13 +33,14 @@
   (-> m
       (/ 3)
       (Math/floor)
+      (long)
       (- 2)))
 
-#_
-(mapv fuel-quantity
-      [12 14 1969 100756])
+(t/deftest fuel-quantity-test
+  (t/is (= [2 2 654 33583]
+           (mapv fuel-quantity
+                 [12 14 1969 100756]))))
 
-#_
 (->> input
      (mapv fuel-quantity)
      (reduce +))
