@@ -5,14 +5,13 @@
 ;; debug fn
 (defn p [x] (println x) x)
 
-;;;;;;;;;
-;;;;;;;;;
-;;;;;;;;;
+;;;;;;;;;;;;
 ;; DAY 01
-;; Given a list of modules, determine total fuel needs
+;; Given a list of modules, determine total fuel needs.
+;;;;;;;;;;;;
 
 (def input
-  "from website"
+  "copied from https://adventofcode.com/2019/day/1/input"
   [78390 73325 52095 126992 106546 81891 69484 131138
    95103 53296 115594 79485 130202 95238 99332 136331
    124321 127271 108047 69186 90597 96001 138773 55284
@@ -36,14 +35,35 @@
       (long)
       (- 2)))
 
-(t/deftest fuel-quantity-test
-  (t/is (= [2 2 654 33583]
-           (mapv fuel-quantity
-                 [12 14 1969 100756]))))
+(mapv fuel-quantity
+      [12 14 1969 100756]) ; => [2 2 654 33583]
 
 (->> input
      (mapv fuel-quantity)
      (reduce +))
 
 ;; => 3391707
+;; correct
+
+;;;;;;;;;;;;
+;; PART 2
+;; Fuel also requires fuel
+;;;;;;;;;;;;
+
+(defn fuel-quantity-2
+  [m]
+  (let [fq (fuel-quantity m)]
+    (if (<= 0 fq)
+      (+ fq (fuel-quantity-2 fq))
+      0)))
+
+(fuel-quantity-2 14) ; => 2
+(fuel-quantity-2 1969) ; => 966
+(fuel-quantity-2 100756) ; => 50346
+
+(->> input
+     (mapv fuel-quantity-2)
+     (reduce +))
+
+;; => 5084676
 ;; correct
