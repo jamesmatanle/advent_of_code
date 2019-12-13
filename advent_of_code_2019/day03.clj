@@ -1,7 +1,7 @@
 (ns day03
-  (:require [day03-input]
-            [clojure.string :as string]
-            [clojure.edn :as edn]))
+  (:require [clojure.string :as string]
+            [clojure.edn :as edn]
+            [clojure.java.io :as io]))
 
 (defn- p [x] (clojure.pprint/pprint x) x)
 
@@ -83,7 +83,8 @@ U62,R66,U55,R34,D71,R55,D58,R83") ; => 159
 U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 135
 
 #_
-(f day03-input/input) ; => 855
+(f (slurp (io/resource "day03_input.txt")))
+;; => 855
 
 
 ;;;;;;;;;;;;
@@ -144,4 +145,6 @@ U62,R66,U55,R34,D71,R55,D58,R83") ; => 610 steps
 U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 410 steps
 
 #_
-(f2 day03-input/input) ; correct
+(f2 (slurp (io/resource "day03_input.txt")))
+;; => 11238
+;; correct

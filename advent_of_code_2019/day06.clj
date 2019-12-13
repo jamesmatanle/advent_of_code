@@ -1,6 +1,6 @@
 (ns day06
-  (:require [day06-input]
-            [clojure.string :as string]))
+  (:require [clojure.string :as string]
+            [clojure.java.io :as io]))
 
 (defn- p [x] (clojure.pprint/pprint x))
 
@@ -59,8 +59,7 @@ K)L")
 (f small-input)
 
 #_
-(f day06-input/input)
-
+(f (slurp (io/resource "day06_input.txt")))
 
 ;;;;;;;;;;;;
 ;; PART 2
@@ -110,4 +109,4 @@ I)SAN")
 (f2 small-input-2)
 
 #_
-(f2 day06-input/input)
+(f2 (slurp (io/resource "day06_input.txt")))

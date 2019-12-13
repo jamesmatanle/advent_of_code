@@ -1,8 +1,8 @@
 (ns day05
-  (:require [day05-input]
-            [clojure.edn :as edn]
+  (:require [clojure.edn :as edn]
             [clojure.string :as string]
-            [day04]))
+            [day04]
+            [clojure.java.io :as io]))
 
 (defn- p [x] (clojure.pprint/pprint x) x)
 
@@ -105,19 +105,20 @@
        (vec)))
 
 (defn f
-  [memorystr & inputs]
+  [memorystr inputs]
   (-> memorystr
       (parse-memory-string)
       (execute inputs)))
 
 #_
-(f "3,0,4,0,99" 3) ; outputs whatever it gets as inputs
+(f "3,0,4,0,99" [5]) ; outputs whatever it gets as inputs
 
 #_
-(f "1002,4,3,4,33")
+(f "1002,4,3,4,33" [])
 
 #_
-(f day05-input/input 1) ; => [0 0 0 0 0 0 0 0 0 15314507]
+(f (slurp (io/resource "day05_input.txt")) [1])
+;; => [0 0 0 0 0 0 0 0 0 15314507]
 ;; part 1 correct
 
 
@@ -126,7 +127,7 @@
 (defn try-20
   [memorystr]
   (->> (range 20)
-       (p)
+       (map vector)
        (map (partial f memorystr))))
 
 #_
@@ -158,5 +159,6 @@
 ;; => ([999] [999] [999] [999] [999] [999] [999] [999] [1000] [1001] [1001] [1001] [1001] [1001] [1001] [1001] [1001] [1001] [1001] [1001])
 
 #_
-(f day05-input/input 5) ; => [652726]
+(f (slurp (io/resource "day05_input.txt")) [5])
+;; => [652726]
 ;; part 2 correct

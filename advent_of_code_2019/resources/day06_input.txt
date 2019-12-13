@@ -1,7 +1,4 @@
-(ns day06-input)
-
-(def input
-  "XLG)95G
+XLG)95G
 W3V)ZZ3
 ZM3)Q4Q
 4S9)KCL
@@ -1656,4 +1653,4 @@ VCG)22D
 B7G)LSZ
 JFD)93S
 BLG)RG4
-XQQ)W94")
+XQQ)W94
