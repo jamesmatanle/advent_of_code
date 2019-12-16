@@ -21,18 +21,19 @@
   [memory pc param-count]
   (map (fn [pos mode]
          (if (= 1 mode)
-           (memory (+ pc (inc pos)))
-           (memory (memory (+ pc (inc pos))))))
-       (range param-count)
+           (memory (+ pc pos))
+           (memory (memory (+ pc pos)))))
+       (map inc (range param-count))
        (concat (parameter-modes (memory pc))
                (repeat 0))))
 
 (comment
-  (opcode 1002)
-  (opcode 99)
-  (opcode 3)
-  (parameters [1002 4 3 4 33] 0 2)
-  (parameter-modes 1002))
+  (opcode 1002) ; => 2
+  (opcode 99) ; => 99
+  (opcode 3) ; => 3
+  (parameters [1002 4 3 4 33] 0 2) ; => [33 3]
+  (parameter-modes 1002) ; => [0 1]
+  )
 
 (defn pc-jump-if
   [memory pc pred]

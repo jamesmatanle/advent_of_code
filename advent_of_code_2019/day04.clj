@@ -1,6 +1,5 @@
-(ns day04)
-
-
+(ns day04
+  (:require [clojure.edn :as edn]))
 
 ;; 6 digit number
 ;; within input range
@@ -39,13 +38,13 @@
 
 (defn parse-to-sequence
   [number]
-  (if (< 0 (int (/ number 10)))
-    (conj (parse-to-sequence (int (/ number 10)))
-          (mod number 10))
-    [(mod number 10)]))
+  (->> number
+      (String/valueOf)
+      (map (comp edn/read-string str))))
 
 #_
 (mapv parse-to-sequence [1 125 1225 0 12250])
+;; => [[1] [1 2 5] [1 2 2 5] [0] [1 2 2 5 0]] 
 
 (defn satisfies?
   [elem]
