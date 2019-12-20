@@ -60,57 +60,38 @@
 ;;;;;;;;;;;;
 ;; need to rewrite my computer such that it can accept input while running. that is, as soon as one machine creates output, send it to the next machine. after 99, check final output.
 
-(defn computer
+(defn execute
   "NOTE can tail call optimize... not necessary though..."
-  ([memory]
-   (let [inputatom (atom nil)
-         outputatom (atom nil)]
-     (fn [x]
-       (case x
-         "set-input!" (fn [input] (reset! inputatom input))
-         "set-output!" (fn [output] (reset! outputatom output))
-         "execute"
-         ((fn [memory pc]
-            (case (day05/opcode (memory pc))
-              1 (recur (assoc memory
-                              (memory (+ pc 3)) ; storage parameter cannot be immediate.
-                              (apply + (day05/parameters memory pc 2)))
-                       (+ pc 4))
-              2 (recur (assoc memory
-                              (memory (+ pc 3))
-                              (apply * (day05/parameters memory pc 2)))
-                       (+ pc 4))
-              3 (recur (assoc memory
-                              (memory (+ pc 1))
-                              (async/<!! @inputatom))
-                       (+ pc 2))
-              4 (do (async/>!! @outputatom
-                               (first (day05/parameters memory pc 1)))
-                    (recur memory
-                           (+ pc 2)))
-              5 (recur memory
-                       (day05/pc-jump-if memory pc not=))
-              6 (recur memory
-                       (day05/pc-jump-if memory pc =))
-              7 (recur (day05/pred-test memory pc <)
-                       (+ pc 4))
-              8 (recur (day05/pred-test memory pc =)
-                       (+ pc 4))
-              99 nil
-              (throw (ex-info "bad opcode" {:x [memory pc]}))))
-          memory 0))))))
-
-(defn computer-execute!
-  [computer]
-  (computer "execute"))
-
-(defn computer-set-input!
-  [computer input]
-  ((computer "set-input!") input))
-
-(defn computer-set-output!
-  [computer output]
-  ((computer "set-output!") output))
+  ([memory input output]
+   ((fn [memory pc]
+      (case (day05/opcode (memory pc))
+        1 (recur (assoc memory
+                        (memory (+ pc 3)) ; storage parameter cannot be immediate.
+                        (apply + (day05/parameters memory pc 2)))
+                 (+ pc 4))
+        2 (recur (assoc memory
+                        (memory (+ pc 3))
+                        (apply * (day05/parameters memory pc 2)))
+                 (+ pc 4))
+        3 (recur (assoc memory
+                        (memory (+ pc 1))
+                        (async/<!! input))
+                 (+ pc 2))
+        4 (do (async/>!! output
+                         (first (day05/parameters memory pc 1)))
+              (recur memory
+                     (+ pc 2)))
+        5 (recur memory
+                 (day05/pc-jump-if memory pc not=))
+        6 (recur memory
+                 (day05/pc-jump-if memory pc =))
+        7 (recur (day05/pred-test memory pc <)
+                 (+ pc 4))
+        8 (recur (day05/pred-test memory pc =)
+                 (+ pc 4))
+        99 nil
+        (throw (ex-info "bad opcode" {:x [memory pc]}))))
+    memory 0)))
 
 (defn try-input-settings-2
   [memory settings]
@@ -118,33 +99,18 @@
         ch1 (async/chan 100)
         ch2 (async/chan 100)
         ch3 (async/chan 100)
-        ch4 (async/chan 100)
-        a (computer memory)
-        b (computer memory)
-        c (computer memory)
-        d (computer memory)
-        e (computer memory)]
-    (computer-set-input! a ch0)
-    (computer-set-output! a ch1)
-    (computer-set-input! b ch1)
-    (computer-set-output! b ch2)
-    (computer-set-input! c ch2)
-    (computer-set-output! c ch3)
-    (computer-set-input! d ch3)
-    (computer-set-output! d ch4)
-    (computer-set-input! e ch4)
-    (computer-set-output! e ch0)
+        ch4 (async/chan 100)]
     (async/>!! ch0 (nth settings 0))
     (async/>!! ch1 (nth settings 1))
     (async/>!! ch2 (nth settings 2))
     (async/>!! ch3 (nth settings 3))
     (async/>!! ch4 (nth settings 4))
     (async/>!! ch0 0)
-    (future (computer-execute! a))
-    (future (computer-execute! b))
-    (future (computer-execute! c))
-    (future (computer-execute! d))
-    (computer-execute! e) ; BLOCK so that the following take is the final one...
+    (future (execute memory ch0 ch1))
+    (future (execute memory ch1 ch2))
+    (future (execute memory ch2 ch3))
+    (future (execute memory ch3 ch4))
+    (execute memory ch4 ch0) ; BLOCK so that the following take is the final one...
     (async/<!! ch0)))
 
 (defn f2
