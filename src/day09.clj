@@ -7,8 +7,6 @@
             [clojure.java.io :as io]
             [clojure.core.async :as async]))
 
-(defn p [x] (clojure.pprint/pprint x) x)
-
 ;; built off of day 7.
 
 (defn mget
@@ -66,7 +64,9 @@
       2 (recur (arithmetic memory pc rb *)
                (+ pc 4)
                rb)
-      3 (recur (assoc memory (first (parameters memory pc rb 1)) (async/<!! in))
+      3 (recur (assoc memory
+                      (first (parameters memory pc rb 1))
+                      ((async/<!! in)))
                (+ pc 2)
                rb)
       4 (do (async/>!! out (->> (parameters memory pc rb 1) first (mget memory)))
@@ -98,13 +98,16 @@
        (zipmap (range))
        (into (sorted-map))))
 
+(defn execute-string
+  [memorystr in out]
+  (execute (parse-memory-string memorystr) in out))
+
 (defn f
   [memorystr inputs]
-  (let [in (async/to-chan inputs)
-        out (async/chan 100)]
-    (-> memorystr
-        (parse-memory-string)
-        (execute in out))
+  (let [in (async/to-chan (map (fn [i] (fn [] i))
+                               inputs))
+        out (async/chan 99999)]
+    (execute-string memorystr in out)
     (async/<!! (async/into [] out))))
 
 #_

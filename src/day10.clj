@@ -3,8 +3,6 @@
             [clojure.set :as set]
             [clojure.java.io :as io]))
 
-(defn p [x] (clojure.pprint/pprint x) x)
-
 (defn gcf
   [a b]
   (long (.gcd (biginteger a)
@@ -232,7 +230,6 @@
                   (partial distance root)))
        (remove (comp (partial = root) first))
        (angle-map)
-       (p)
        (list-circles)))
 
 (defn f2

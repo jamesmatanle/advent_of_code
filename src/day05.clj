@@ -4,8 +4,6 @@
             [day04]
             [clojure.java.io :as io]))
 
-(defn- p [x] (clojure.pprint/pprint x) x)
-
 (defn opcode
   [instruction]
   (mod instruction 100))

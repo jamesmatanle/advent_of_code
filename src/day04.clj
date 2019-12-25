@@ -44,28 +44,26 @@
 
 #_
 (mapv parse-to-sequence [1 125 1225 0 12250])
-;; => [[1] [1 2 5] [1 2 2 5] [0] [1 2 2 5 0]] 
+;; => [[1] [1 2 5] [1 2 2 5] [0] [1 2 2 5 0]]
 
-(defn satisfies?
+(defn good-number?
   [elem]
   ((every-pred digits-never-decrease?
                has-2-same-adj?)
    (parse-to-sequence elem)))
 
-(defn test
+(defn f
   [input]
   (->> (apply range input)
        (reduce (fn [acc elem]
-                 (if (satisfies? elem)
+                 (if (good-number? elem)
                    (+ acc 1)
                    acc))
                0)))
 
 #_
-(test input)
-
+(f input)
 ;; => 1079
-;; correct
 
 ;;;;;;;;;
 ;; PART 2
@@ -81,7 +79,7 @@
           []
           coll))
 
-(defn has-2-same-adj?
+(defn has-2-same-adj?-2
   "returns first 2 adjacent digits that are the same, else empty."
   [coll]
   (->> coll
@@ -92,10 +90,9 @@
        (boolean)))
 
 #_
-(mapv has-2-same-adj? [[1 2 2 3] [1 2 2 2 3] [1 2 2 2 2 3]])
+(mapv has-2-same-adj-2? [[1 2 2 3] [1 2 2 2 3] [1 2 2 2 2 3]])
 
 #_
-(test input)
-
+(with-redefs [has-2-same-adj? has-2-same-adj?-2]
+  (f input))
 ;; => 699
-;; correct

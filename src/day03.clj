@@ -3,8 +3,6 @@
             [clojure.edn :as edn]
             [clojure.java.io :as io]))
 
-(defn- p [x] (clojure.pprint/pprint x) x)
-
 ;; follow the wires and store each location. check if any location from wire 2 is in wire 1, use sets for coordinates for constant lookup. O(length of wire 1 + length of wire 2) b/c constant time to check each position for match. return minimum of all matches' sum of x and y.
 
 ;; coordinate stored as simple list. duplicates will exist. would be faster to build set rather than build list and convert to set. It turns out that keeping list is reusable in part 2 though.
@@ -53,8 +51,6 @@
 
 (defn manhattan-from-origin
   [[x y]]
-  (p x)
-  (p y)
   (+ (Math/abs x) (Math/abs y)))
 
 (defn f

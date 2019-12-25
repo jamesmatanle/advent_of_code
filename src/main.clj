@@ -1,5 +1,6 @@
 (ns main
-  (:require [day01]
+  (:require [util]
+            [day01]
             [day02]
             [day03]
             [day04]

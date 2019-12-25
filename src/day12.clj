@@ -2,8 +2,6 @@
   (:require [clojure.string :as string]
             [day10]))
 
-(defn p [x] (clojure.pprint/pprint x) x)
-
 (defn parse
   [inputstr]
   (->> (string/split inputstr #"\n")

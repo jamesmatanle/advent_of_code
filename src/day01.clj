@@ -1,9 +1,5 @@
-(ns day01
-  (:require [clojure.test :as t]))
+(ns day01)
 ;; https://adventofcode.com/2019
-
-;; debug fn
-(defn p [x] (println x) x)
 
 ;;;;;;;;;;;;
 ;; DAY 01

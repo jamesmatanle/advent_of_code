@@ -2,8 +2,6 @@
   (:require [clojure.string :as string]
             [clojure.java.io :as io]))
 
-(defn- p [x] (clojure.pprint/pprint x))
-
 (defn parse-to-map
   "create map from child to parent to model tree of relationships."
   [s]

@@ -7,7 +7,6 @@
             [clojure.core.async :as async]
             [clojure.tools.logging :as log]))
 
-(defn- p [x] (clojure.pprint/pprint x))
 ;; call day05/f for each of 5 thrusters, provide each a parameter and previous output (0 for first thruster.)
 ;; parameter can be 0-4 used exactly once...5! = 120 combinations to try.
 
