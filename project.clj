@@ -3,7 +3,7 @@
                  [org.clojure/core.async "0.6.532"]
                  [org.clojure/math.combinatorics "0.1.6"]
                  [org.clojure/tools.logging "0.5.0"]
-                 [incanter "1.9.3"]
+                 [incanter "1.9.3"] ; dead
                  [org.clojure/clojure "1.9.0"]] ; needed for incanter
   :source-paths ["src"]
   :test-paths ["test"]
