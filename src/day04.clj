@@ -39,8 +39,8 @@
 (defn parse-to-sequence
   [number]
   (->> number
-      (String/valueOf)
-      (map (comp edn/read-string str))))
+       (String/valueOf)
+       (map (comp edn/read-string str))))
 
 #_
 (mapv parse-to-sequence [1 125 1225 0 12250])

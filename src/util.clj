@@ -1,6 +1,7 @@
 (ns util
   (:require [clojure.java.io :as io]
-            [clojure.pprint :as pp]))
+            [clojure.pprint :as pp]
+            [clojure.string :as string]))
 
 (defn p
   [x]
@@ -9,4 +10,4 @@
 
 (defn fstr
   [file]
-  (slurp (io/resource file)))
+  (-> file (io/resource) (slurp) (string/trim-newline)))
