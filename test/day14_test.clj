@@ -128,18 +128,3 @@
 
 (sut/max-fuel example-3)
 ;; => 460664
-
-
-
-
-
-
-
-(defn parse-reaction [s]
-  (->> (clojure.string/split s #"=>")
-       (map (comp (partial into {})
-                  (partial map (fn [[_ amount chemical]] [chemical (clojure.edn/read-string amount)]))
-                  (partial re-seq #"(\d+) ([A-Z]+)")))
-       (zipmap [:in :out])))
-
-(parse-reaction input1)
