@@ -3,9 +3,9 @@
             [clojure.edn :as edn]
             [clojure.java.io :as io]))
 
-;; follow the wires and store each location. check if any location from wire 2 is in wire 1, use sets for coordinates for constant lookup. O(length of wire 1 + length of wire 2) b/c constant time to check each position for match. return minimum of all matches' sum of x and y.
+;; follow the wires, store each location. check if any location from wire 2 is in wire 1. constant lookup via sets. constant time to check each position for match, so O(length of wire 1 + length of wire 2). return minimum of all matches' sum of x and y.
 
-;; coordinate stored as simple list. duplicates will exist. would be faster to build set rather than build list and convert to set. It turns out that keeping list is reusable in part 2 though.
+;; coordinate stored as simple list, duplicates will exist. would be faster to build set rather than build list and convert to set. however list is useful in part 2.
 
 (defn add-coordinates-from-path
   [acc path]
@@ -46,14 +46,11 @@
           []
           set2))
 
-#_
-(matches #{[0 0] [0 1] [0 2]} #{[2 1] [1 1] [0 1] [0 2]})
-
 (defn manhattan-from-origin
   [[x y]]
   (+ (Math/abs x) (Math/abs y)))
 
-(defn f
+(defn part1
   [input]
   (->> input
        (parse)
@@ -65,27 +62,11 @@
        (apply min)))
 
 #_
-(-> "R8,U5,L5,D3"
-    (parse)
-    (first)
-    (all-coordinates))
-
-#_
-(f "R75,D30,R83,U83,L12,D49,R71,U7,L72
-U62,R66,U55,R34,D71,R55,D58,R83") ; => 159
-
-#_
-(f "R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
-U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 135
-
-#_
-(f (slurp (io/resource "day03_input.txt")))
+(part1 (util/fstr "day03_input.txt"))
 ;; => 855
-
 
 ;;;;;;;;;;;;
 ;; PART 2
-;;;;;;;;;;;;
 
 ;; Rather than converting positions into a set, convert positions into map of position to number of steps at _first_ time reaching position. Then lookup intersections, and do new manhattan on each intersection, using the lookup values.
 
@@ -99,9 +80,6 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 135
               (map inc)
               (reverse))))
 
-#_
-(convert [[0 1] [0 2] [0 1]])
-
 (defn intersection-delays
   "returns a list of the intersection delays for all matches on 2 wires."
   [m1 m2]
@@ -114,11 +92,7 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 135
           []
           m2))
 
-#_
-(intersection-delays {[0 1] 1 [0 2] 3}
-                     {[0 1] 2 [1 1] 2 [0 2] 5})
-
-(defn f2
+(defn part2
   [input]
   (->> input
        (parse)
@@ -129,18 +103,5 @@ U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 135
        (apply min)))
 
 #_
-(f2 "R8,U5,L5,D3
-U7,R6,D4,L4") ; => 30
-
-#_
-(f2 "R75,D30,R83,U83,L12,D49,R71,U7,L72
-U62,R66,U55,R34,D71,R55,D58,R83") ; => 610 steps
-
-#_
-(f2 "R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51
-U98,R91,D20,R16,D67,R40,U7,R15,U6,R7") ; => 410 steps
-
-#_
-(f2 (slurp (io/resource "day03_input.txt")))
+(part2 (util/fstr "day03_input.txt"))
 ;; => 11238
-;; correct

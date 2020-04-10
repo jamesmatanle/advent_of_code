@@ -1,13 +1,8 @@
-(ns day01)
-;; https://adventofcode.com/2019
-
-;;;;;;;;;;;;
-;; DAY 01
-;; Given a list of modules, determine total fuel needs.
-;;;;;;;;;;;;
+(ns day01
+  "https://adventofcode.com/2019/day/1")
 
 (def input
-  "copied from https://adventofcode.com/2019/day/1/input"
+  "https://adventofcode.com/2019/day/1/input"
   [78390 73325 52095 126992 106546 81891 69484 131138
    95103 53296 115594 79485 130202 95238 99332 136331
    124321 127271 108047 69186 90597 96001 138773 55284
@@ -22,44 +17,22 @@
    54699 56603 66821 80744 124514 143113 132581 79376
    105728 115337 111028 52209])
 
-(defn fuel-quantity
-  "returns necessary fuel quanity for module of mass m."
+(defn part1
+  "returns fuel quantity necessary for module of mass m."
   [m]
-  (-> m
-      (/ 3)
-      (Math/floor)
-      (long)
-      (- 2)))
+  (-> m (/ 3) (Math/floor) (long) (- 2)))
 
-(mapv fuel-quantity
-      [12 14 1969 100756]) ; => [2 2 654 33583]
-
-(->> input
-     (mapv fuel-quantity)
-     (reduce +))
-
+#_
+(->> input (mapv part1) (reduce +))
 ;; => 3391707
-;; correct
 
-;;;;;;;;;;;;
-;; PART 2
-;; Fuel also requires fuel
-;;;;;;;;;;;;
-
-(defn fuel-quantity-2
+(defn part2
   [m]
-  (let [fq (fuel-quantity m)]
+  (let [fq (part1 m)]
     (if (<= 0 fq)
-      (+ fq (fuel-quantity-2 fq))
+      (+ fq (part2 fq))
       0)))
 
-(fuel-quantity-2 14) ; => 2
-(fuel-quantity-2 1969) ; => 966
-(fuel-quantity-2 100756) ; => 50346
-
-(->> input
-     (mapv fuel-quantity-2)
-     (reduce +))
-
+#_
+(->> input (mapv part2) (reduce +))
 ;; => 5084676
-;; correct

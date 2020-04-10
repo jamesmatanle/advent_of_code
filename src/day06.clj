@@ -30,7 +30,7 @@
                (reduce +)))
        0))))
 
-(defn f
+(defn part1
   [inputstr]
   (-> inputstr
       (parse-to-map)
@@ -38,44 +38,12 @@
 
 ;; find COM. then find COM's children. +1 for direct relationship, +1 for each child. for each child, find children. +2 for direct and indirect relationships * +1 for each child (level 2).
 
-(def small-input "COM)B
-B)C
-C)D
-D)E
-E)F
-B)G
-G)H
-D)I
-E)J
-J)K
-K)L")
-
 #_
-(parse small-input)
-
-#_
-(f small-input)
-
-#_
-(f (slurp (io/resource "day06_input.txt")))
+(part1 (util/fstr "day06_input.txt"))
 
 ;;;;;;;;;;;;
 ;; PART 2
 ;;;;;;;;;;;;
-
-(def small-input-2 "COM)B
-B)C
-C)D
-D)E
-E)F
-B)G
-G)H
-D)I
-E)J
-J)K
-K)L
-K)YOU
-I)SAN")
 
 (defn lineage
   [m node]
@@ -97,14 +65,11 @@ I)SAN")
        (apply concat)
        (count)))
 
-(defn f2
+(defn part2
   [inputstr]
   (-> inputstr
       (parse-to-map)
       (num-transfers-to-santa)))
 
 #_
-(f2 small-input-2)
-
-#_
-(f2 (slurp (io/resource "day06_input.txt")))
+(part2 (util/fstr "day06_input.txt"))

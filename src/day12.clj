@@ -1,4 +1,5 @@
 (ns day12
+  "https://adventofcode.com/2019/day/12"
   (:require [clojure.string :as string]
             [day10]))
 
@@ -50,37 +51,10 @@
                                  (update-velocities)
                                  (update-positions))))))
 
-(defn f
+(defn part1
   [n inputstr]
   (last (take (inc n)
               (pos-vels (parse inputstr)))))
-
-#_
-(parse
- "
-<x=-1, y=0, z=2>
-<x=2, y=-10, z=-7>
-<x=4, y=-8, z=8>
-<x=3, y=5, z=-1>")
-
-#_
-(f 10
-   "
-<x=-1, y=0, z=2>
-<x=2, y=-10, z=-7>
-<x=4, y=-8, z=8>
-<x=3, y=5, z=-1>")
-;; => ([2 1 -3 -3 -2 1] [1 -8 0 -1 1 3] [3 -6 1 3 2 -3] [2 0 4 1 -1 -1])
-
-
-#_
-(f 100
- "
-<x=-8, y=-10, z=0>
-<x=5, y=5, z=10>
-<x=2, y=-7, z=3>
-<x=9, y=-8, z=-3>")
-;; => ([8 -12 -9 -7 3 0] [13 16 -3 3 -11 -5] [-29 -11 -1 -3 7 4] [16 -13 23 7 1 1])
 
 (defn potential-energy
   [moon]
@@ -104,16 +78,7 @@
        (apply +)))
 
 #_
-(total-energy (f 100
-                 "
-<x=-8, y=-10, z=0>
-<x=5, y=5, z=10>
-<x=2, y=-7, z=3>
-<x=9, y=-8, z=-3>"))
-;; => 1940
-
-#_
-(total-energy (f 1000
+(total-energy (part1 1000
         "
 <x=13, y=9, z=5>
 <x=8, y=14, z=-2>
@@ -121,7 +86,6 @@
 <x=2, y=-6, z=1>
 "))
 ;; => 6490
-
 
 ;;;;;;;;;;;;
 ;; PART 2
@@ -138,9 +102,6 @@
   ([x y & args]
    (reduce lcm (concat [x y] args))))
 
-#_
-(lcm 80 123 214 75 60) ; => 300
-
 (let [pred (fn [idx [moon init]] (= [(init idx) (init (+ idx 3))]
                                     [(moon idx) (moon (+ idx 3))]))]
   (defn cycle?
@@ -151,7 +112,7 @@
               (map vector inits)
               (every? (partial pred idx))))))
 
-(defn f2
+(defn part2
   [inputstr]
   (let [initial (parse inputstr)]
     (loop [stepnum 1
@@ -167,27 +128,8 @@
                  (cycle? 2 moons initial xyz-cycles) (assoc 2 stepnum)))))))
 
 #_
-(f2
-   "
-<x=-1, y=0, z=2>
-<x=2, y=-10, z=-7>
-<x=4, y=-8, z=8>
-<x=3, y=5, z=-1>
-")
-;; => 2772
-
-#_
-(f2 "
-<x=-8, y=-10, z=0>
-<x=5, y=5, z=10>
-<x=2, y=-7, z=3>
-<x=9, y=-8, z=-3>
-")
-;; => 4686774924
-
-#_
-(f2
-   "
+(part2
+ "
 <x=13, y=9, z=5>
 <x=8, y=14, z=-2>
 <x=-5, y=4, z=11>

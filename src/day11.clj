@@ -1,9 +1,8 @@
 (ns day11
+  "https://adventofcode.com/2019/day/11"
   (:require [day09]
             [clojure.core.async :as async]
-            [clojure.java.io :as io]
-            [incanter.core :as incanter]
-            [incanter.charts :as chart]))
+            [clojure.java.io :as io]))
 
 (defn next-position
   [[x y] direction]
@@ -25,22 +24,12 @@
          4)
     nil))
 
-(comment
-  (next-direction 0 0)
-  (next-direction 0 1)
-  (next-direction 1 0)
-  (next-direction 1 1)
-  (next-direction 2 0)
-  (next-direction 2 1)
-  (next-direction 3 0)
-  (next-direction 3 1))
-
 (defn exec-loop
   [in out initial-color]
   (loop [color-map {[0 0] initial-color}
          direction 0
          position [0 0]]
-    (async/>!! out (color-map position 0))
+    (async/>!! out (constantly (color-map position 0)))
     (let [[val ch] (async/alts!! [in (async/timeout 1000)])]
       (if (identical? in ch)
         (if-let [new-direction (next-direction direction (async/<!! in))]
@@ -50,37 +39,52 @@
           color-map)
         color-map))))
 
-(defn f
+(defn robot
   [memorystr initial-color]
   (let [brain-in (async/chan 1)
         brain-out (async/chan 2)]
     (future
-      (day09/execute (day09/parse-memory-string memorystr)
-                     brain-in
-                     brain-out))
+      (day09/execute-string memorystr brain-in brain-out))
     (exec-loop brain-out brain-in initial-color)))
 
+(defn part1
+  []
+  (count
+   (robot (util/fstr "day11_input.txt")
+          0)))
+
 #_
-(count (f (slurp (io/resource "day11_input.txt"))
-          0))
-;; => 2276
+(part1)
 ;; => 2276
 
 ;;;;;;;;;;;;
 ;; PART 2
 ;; change initial color to white, then plot coordinates to read message.
 ;;;;;;;;;;;;
-;;;;;;;;;;;;
-;; PART 2
-;;;;;;;;;;;;
 
-;; filter out all the white spots, plot them using xy-plot
+(defn plot-coordinates
+  [coordinates]
+  (let [xs (map (comp first first) coordinates)
+        ys (map (comp second first) coordinates)]
+    (for [y (range (apply max ys) (dec (apply min ys)) -1)]
+      (for [x (range (apply min xs) (inc (apply max xs)))]
+        (if (zero? (get coordinates [x y] 0))
+          " "
+          1)))))
+
+(defn part2
+  []
+  (->> (robot (util/fstr "day11_input.txt") 1)
+       (plot-coordinates)
+       (mapv println)))
+
 #_
-(let [xy (->> (f (slurp (io/resource "day11_input.txt"))
-                 1)
-              (filter (fn [[k v]] (= 1 v)))
-              (map first))]
-  (incanter/view
-   (chart/scatter-plot (map first xy)
-                       (map second xy))))
+(part2)
+;; =>
+;; (    1 1     1 1 1     1         1 1 1         1 1   1 1 1 1     1 1     1     1      )
+;; (  1     1   1     1   1         1     1         1         1   1     1   1     1      )
+;; (  1         1 1 1     1         1     1         1       1     1         1     1      )
+;; (  1         1     1   1         1 1 1           1     1       1         1     1      )
+;; (  1     1   1     1   1         1         1     1   1         1     1   1     1      )
+;; (    1 1     1 1 1     1 1 1 1   1           1 1     1 1 1 1     1 1       1 1        )
 ;; => CBLPJZCU

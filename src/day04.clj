@@ -20,9 +20,6 @@
            (first coll)
            (rest coll))))
 
-#_
-(mapv has-2-same-adj? [[1 2 2 4] [2 2] [1 2 3] [3 2 1] [1] [0 0]])
-
 (defn digits-never-decrease?
   ([digits]
    (digits-never-decrease? (first digits) (rest digits)))
@@ -33,18 +30,11 @@
                                                    (rest digits))
      :else false)))
 
-#_
-(mapv digits-never-decrease? [[1 2 5] [1 2 2 4 6 8 9] [1 2 2 0] [1 0 2 2] [0] [1 2]])
-
 (defn parse-to-sequence
   [number]
   (->> number
        (String/valueOf)
        (map (comp edn/read-string str))))
-
-#_
-(mapv parse-to-sequence [1 125 1225 0 12250])
-;; => [[1] [1 2 5] [1 2 2 5] [0] [1 2 2 5 0]]
 
 (defn good-number?
   [elem]
@@ -52,7 +42,7 @@
                has-2-same-adj?)
    (parse-to-sequence elem)))
 
-(defn f
+(defn part1
   [input]
   (->> (apply range input)
        (reduce (fn [acc elem]
@@ -62,11 +52,8 @@
                0)))
 
 #_
-(f input)
+(part1 input)
 ;; => 1079
-
-;;;;;;;;;
-;; PART 2
 
 (defn adjacent-groups
   [coll]
@@ -90,9 +77,6 @@
        (boolean)))
 
 #_
-(mapv has-2-same-adj-2? [[1 2 2 3] [1 2 2 2 3] [1 2 2 2 2 3]])
-
-#_
 (with-redefs [has-2-same-adj? has-2-same-adj?-2]
-  (f input))
+  (part1 input))
 ;; => 699

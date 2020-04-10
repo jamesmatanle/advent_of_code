@@ -32,7 +32,7 @@
   (* (char-count layer \1)
      (char-count layer \2)))
 
-(defn f
+(defn part1
   [input width height]
   (->> input
        (remove #{\newline})
@@ -41,12 +41,8 @@
        (answer)))
 
 #_
-(f "123456789012" 3 2)
-
-#_
-(f (slurp (io/resource "day08_input.txt")) 25 6)
+(part1 (util/fstr "day08_input.txt") 25 6)
 ;; => 2318
-;; correct
 
 ;;;;;;;;;;;;
 ;; PART 2
@@ -56,9 +52,6 @@
 (defn transpose
   [m]
   (apply mapv vector m))
-
-#_
-(transpose [[1 2 3] [1 2 3]]) ; => [[1 1] [2 2] [3 3]]
 
 (defn decode-position
   "earlier positions have priority. remove all leading 2s. "
@@ -76,7 +69,7 @@
        '()))
    coll))
 
-(defn f2
+(defn part2
   [input width height]
   (->> input
        (remove #{\newline})
@@ -88,12 +81,9 @@
        (mapv (partial apply str))))
 
 #_
-(f2 "0222112222120000" 2 2)
-#_
-["01" "10"]
+(part2 (util/fstr "day08_input.txt") 25 6)
 
-#_
-(f2 (slurp (io/resource "day08_input.txt")) 25 6)
+;; =>
 #_
 ["0 1 1 0 0 1 0 0 1 0 1 1 1 1 0 0 1 1 0 0 1 1 1 0 0"
  "1 0 0 1 0 1 0 0 1 0 1 0 0 0 0 1 0 0 1 0 1 0 0 1 0"

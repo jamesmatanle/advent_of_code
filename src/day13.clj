@@ -7,16 +7,16 @@
 ;; PART 1
 ;;;;;;;;;;;;
 
-(defn f
+(defn part1
   [inputstr]
-  (->> (day09/f inputstr [])
+  (->> (day09/part1 inputstr [])
        (partition-all 3)
        (map #(nth % 2))
        (filter (partial = 2))
        (count)))
 
 #_
-(f (util/fstr "day13_input.txt"))
+(part1 (util/fstr "day13_input.txt"))
 ;; => 420
 
 ;;;;;;;;;;;;
@@ -102,7 +102,7 @@
           (recur)
           nil)))))
 
-(defn f
+(defn part2
   []
   (let [game-input (async/chan)
         game-output (async/chan 100000)]
@@ -117,5 +117,5 @@
     (last (async/<!! (async/reduce conj [] game-output)))))
 
 #_
-(f)
+(part2)
 ;; => 21651
