@@ -1,6 +1,11 @@
 import functools
 
 
+def spy(x):
+    print('spy:', x)
+    return x
+
+
 def viz(fn):
     """
     print function input / output

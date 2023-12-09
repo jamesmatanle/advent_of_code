@@ -1,14 +1,17 @@
 import math
+import re
 
 
 def part1(A):
     def num_ways(t, d):
         return sum(1 for x in range(t) if d < (x*(t-x)))
-    return math.prod(num_ways(t, d) for t, d in A)
+    A = zip(*[re.findall(r'\d+', line) for line in A])
+    return math.prod(num_ways(int(t), int(d)) for t, d in A)
 
 
 # distance is parabolic. use binary search to find first point above d
-def part2(t, d):
+def part2(A):
+    t, d = [int(x) for line in A for x in re.findall(r'\d+', line.replace(' ', ''))]
     lo, hi = 0, t // 2
     while lo < hi:
         mid = (lo + hi) // 2
@@ -19,14 +22,15 @@ def part2(t, d):
     return t - lo - lo + 1
 
 
-TEST1 = [[7, 9], [15, 40], [30, 200]]
-IN1 = [[56, 499], [97, 2210], [77, 1097], [93, 1440]]
+IN = open('day06_input.txt').read().splitlines()
 
-print('part1 test:', part1(TEST1))  # 288
-print('part1:', part1(IN1))
+TEST = """
+Time:      7  15   30
+Distance:  9  40  200
+""".strip().splitlines()
 
-TEST2 = [71530, 940200]
-IN2 = [56977793, 499221010971440]
+print('part1 test:', part1(TEST))  # 288
+print('part1:', part1(IN))
 
-print('part2 test:', part2(*TEST2))  # 71503
-print('part2:', part2(*IN2))
+print('part2 test:', part2(TEST))  # 71503
+print('part2:', part2(IN))
