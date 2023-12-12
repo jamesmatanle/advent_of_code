@@ -1,6 +1,7 @@
+import collections
+import itertools
 import math
 import re
-import itertools
 
 
 def part1(S):
@@ -14,7 +15,7 @@ def part2(S):
 TEST = """
 """.strip()
 
-IN = open('day0_input.txt').read()
+IN = open('day_input.txt').read()
 
 print('part1 test:', part1(TEST))  # =>
 print('part1:', part1(IN))
