@@ -1,15 +1,20 @@
-import collections
-import itertools
-import math
-import re
-import util
+import functools
 
 
-def part1(A):
+def parse_line(line, expand):
+    if expand:
+        return (tuple('?'.join([line.split()[0] for _ in range(5)])),
+                tuple([int(x) for _ in range(5) for x in line.split()[1].split(',')]))
+    return (tuple(line.split()[0]),
+            tuple([int(x) for x in line.split()[1].split(',')]))
+
+
+def solve(A, expand):
     # @util.viz
+    @functools.cache
     def fn(B, C, breakable):
         if not C:
-            return 1
+            return 1 if '#' not in B else 0
         if len(B) < C[0]:
             return 0
         if B[0] == '#':  # must break
@@ -22,14 +27,18 @@ def part1(A):
             if breakable and all(B[k] in '?#' for k in range(C[0])):
                 return (fn(B[C[0]:], C[1:], False) + fn(B[1:], C, True))
         return fn(B[1:], C, True)
-    return sum(fn(tuple(line.split()[0]),
-                  tuple([int(x) for x in line.split()[1].split(',')]),
+    return sum(fn(parse_line(line, expand)[0],
+                  parse_line(line, expand)[1],
                   True)
                for line in A)
 
 
-def part2(S):
-    return
+def part1(A):
+    return solve(A, False)
+
+
+def part2(A):
+    return solve(A, True)
 
 
 TEST = """
@@ -43,8 +52,8 @@ TEST = """
 
 IN = open('day12_input.txt').read().splitlines()
 
-print('part1 test:', part1(TEST))  # =>
-print('part1:', part1(IN))
+print('part1 test:', part1(TEST))  # => 21
+print('part1:', part1(IN))  # => 7402
 
-# print('part2 test:', part2(TEST))  # =>
-# print('part2:', part2(IN))
+print('part2 test:', part2(TEST))  # => 525152
+print('part2:', part2(IN))  # => 3384337640277

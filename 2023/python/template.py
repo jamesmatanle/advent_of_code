@@ -1,4 +1,5 @@
 import collections
+import functools
 import itertools
 import math
 import re
