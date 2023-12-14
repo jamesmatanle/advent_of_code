@@ -24,3 +24,8 @@ def viz(fn):
         return res
     count = 0
     return wrapped
+
+
+def print_grid(A):
+    print('  ' + ' '.join(str(j % 10) for j in range(len(A[0]))))
+    [print(str(i % 10), ' '.join(row)) for i, row in enumerate(A)]
