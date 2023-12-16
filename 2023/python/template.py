@@ -19,7 +19,7 @@ TEST = """
 IN = open('day_input.txt').read()
 
 print('part1 test:', part1(TEST))  # =>
-print('part1:', part1(IN))
+# print('part1:', part1(IN))
 
 print('part2 test:', part2(TEST))  # =>
-print('part2:', part2(IN))
+# print('part2:', part2(IN))
